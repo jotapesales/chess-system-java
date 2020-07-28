@@ -28,6 +28,12 @@ public class ChessMatch {
 		return (ChessPiece) capturedPiece;
 	}
 	
+	public boolean[][] PossibleMoves(ChessPosition sourcePosition){
+		Position position = sourcePosition.toPosition();
+		ValidateSourcePosition(position);
+		return board.piece(position).possibleMoves();
+	}
+	
 	private void ValidateSourcePosition(Position source) {
 		if(!board.ThereIsAPiece(source))
 			throw new ChessException("There is no piece on this source position.");

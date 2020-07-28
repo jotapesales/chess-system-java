@@ -21,10 +21,17 @@ public class Program {
 				UI.clearScreen();
 				UI.printBoard(chessMatch.getPieces());
 				System.out.println();
+				
 				System.out.println("Source:");
 				ChessPosition source = UI.readChessPosition(sc);
+				
+				boolean[][] possibleMoves = chessMatch.PossibleMoves(source);
+				UI.clearScreen();
+				UI.printBoard(chessMatch.getPieces(), possibleMoves);
+				
 				System.out.println("Target:");
 				ChessPosition target = UI.readChessPosition(sc);
+				
 				ChessPiece cp = chessMatch.performChessMove(source,target);	
 				System.out.println("Move again? y/n");
 				aux = sc.nextLine();
