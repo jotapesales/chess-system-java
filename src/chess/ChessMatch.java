@@ -1,6 +1,7 @@
 package chess;
 import boardgame.Board;
 import boardgame.Piece;
+import boardgame.Position;
 import chess.pieces.King;
 import chess.pieces.Rook;
 public class ChessMatch {
@@ -20,16 +21,25 @@ public class ChessMatch {
 	}
 	
 	public ChessPiece performChessMove(ChessPosition sourcePosition, ChessPosition targetPosition) {
-		ValidateSourcePosition(sourcePosition);
+		ValidateSourcePosition(sourcePosition.toPosition());
+		ValidateTargetPosition(sourcePosition.toPosition(), targetPosition.toPosition());
 		Piece piece = board.RemovePiece(sourcePosition.toPosition());
 		Piece capturedPiece = board.PlacePiece(piece, targetPosition.toPosition());
 		return (ChessPiece) capturedPiece;
 	}
 	
-	private void ValidateSourcePosition(ChessPosition source) {
-		if(!board.ThereIsAPiece(source.toPosition()))
+	private void ValidateSourcePosition(Position source) {
+		if(!board.ThereIsAPiece(source))
 			throw new ChessException("There is no piece on this source position.");
+		else if(!board.piece(source).isThereAnyPossibleMove())
+			throw new ChessException("There is no any possible move.");
 	}
+	
+	private void ValidateTargetPosition(Position source, Position target) {
+		if(!this.board.piece(source).possibleMove(target))
+			throw new ChessException("The chosen piece can't be moved to target.");
+	}
+	
 	private void placeNewPiece(char column, int row, ChessPiece piece) {
 		board.PlacePiece(piece, new ChessPosition(column,row).toPosition());
 	}

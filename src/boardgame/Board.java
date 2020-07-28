@@ -36,7 +36,7 @@ public class Board {
 				(row >= 0 && column >= 0);
 	}
 	
-	private boolean PositionExists(Position position) {
+	public boolean PositionExists(Position position) {
 		return PositionExists(position.getRow(),position.getColumn());
 	}
 	
