@@ -13,13 +13,11 @@ public class Program {
 		// TODO Auto-generated method stub
 		ChessMatch chessMatch = new ChessMatch();
 		Scanner sc = new Scanner(System.in);
-		UI.printBoard(chessMatch.getPieces());
-		System.out.println("Mover peça? y/n");
 		String aux = "y";
 		while(aux.charAt(0) != 'n') {
 			try {
 				UI.clearScreen();
-				UI.printBoard(chessMatch.getPieces());
+				UI.printMatch(chessMatch);
 				System.out.println();
 				
 				System.out.println("Source:");
