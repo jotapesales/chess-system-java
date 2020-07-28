@@ -17,6 +17,7 @@ public abstract class ChessPiece extends Piece {
 	}
 	
 	protected boolean isThereOpponentPiece(Position position) {
+		if(!getBoard().PositionExists(position)) return false;
 		ChessPiece cp = (ChessPiece)getBoard().piece(position);
 		return cp != null && cp.getColor( ) != color;
 	}
