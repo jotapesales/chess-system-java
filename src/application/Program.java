@@ -17,7 +17,7 @@ public class Program {
 		Scanner sc = new Scanner(System.in);
 		String aux = "y";
 		List<ChessPiece> captured = new ArrayList<>();
-		while(aux.charAt(0) != 'n') {
+		while(true) {
 			try {
 				UI.clearScreen();
 				UI.printMatch(chessMatch, captured);
@@ -37,8 +37,6 @@ public class Program {
 				
 				if(cp != null)
 					captured.add(cp);
-				System.out.println("Move again? y/n");
-				aux = sc.nextLine();
 			}
 			catch (ChessException e) {
 				System.out.println(e.getMessage());
@@ -49,7 +47,6 @@ public class Program {
 				sc.nextLine();
 			}
 		}
-		sc.close();
 	}
 
 }
