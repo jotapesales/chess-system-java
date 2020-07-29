@@ -1,6 +1,9 @@
 package application;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 import chess.ChessMatch;
@@ -75,8 +78,11 @@ public class UI {
 		}
 		System.out.print(" ");
 	}
-	public static void printMatch(ChessMatch chessMatch) {
+	
+	public static void printMatch(ChessMatch chessMatch, List<ChessPiece> captured) {
 		printBoard(chessMatch.getPieces());
+		System.out.println();
+		printCapturedPieces(captured);
 		System.out.println();
 		System.out.println("Turn: "+chessMatch.getTurn());
 		System.out.println("Waiting player:.. "+chessMatch.getCurrentPlayer());
@@ -95,5 +101,17 @@ public class UI {
 			}
 			System.out.print(" ");
 		}
+	}
+	
+	private static void printCapturedPieces(List<ChessPiece> captured) {
+		List<ChessPiece> white = new ArrayList<>();
+		List<ChessPiece> black = new ArrayList<>();
+		for(ChessPiece cp : captured) {
+			((cp.getColor() == Color.WHITE) ? white : black).add(cp);
+		}
+		System.out.print("Captured pieces: \nWhite:");
+		System.out.println(ANSI_WHITE+Arrays.toString(white.toArray())+ANSI_RESET);
+		System.out.print("Black:");
+		System.out.print(ANSI_YELLOW+Arrays.toString(black.toArray())+ANSI_RESET);
 	}
 }

@@ -1,4 +1,7 @@
 package chess;
+import java.util.ArrayList;
+import java.util.List;
+
 import boardgame.Board;
 import boardgame.Piece;
 import boardgame.Position;
@@ -8,6 +11,8 @@ public class ChessMatch {
 	private Board board;
 	private int turn;
 	private Color currentPlayer;
+	private List<Piece> piecesOnTheBoard = new ArrayList<>();
+	private List<Piece> capturedPieces = new ArrayList<>();
 	
 	public int getTurn() {
 		return turn;
@@ -34,14 +39,25 @@ public class ChessMatch {
 	}
 	
 	public ChessPiece performChessMove(ChessPosition sourcePosition, ChessPosition targetPosition) {
-		ValidateSourcePosition(sourcePosition.toPosition());
-		ValidateTargetPosition(sourcePosition.toPosition(), targetPosition.toPosition());
-		Piece piece = board.RemovePiece(sourcePosition.toPosition());
-		Piece capturedPiece = board.PlacePiece(piece, targetPosition.toPosition());
+		Position source = sourcePosition.toPosition();
+		Position target =  targetPosition.toPosition();
+		ValidateSourcePosition(source);
+		ValidateTargetPosition(source, target);
+		Piece capturedPiece = makeMove(source, target);
 		nextTurn();
 		return (ChessPiece) capturedPiece;
 	}
 	
+	private Piece makeMove(Position source, Position target) {
+		Piece p = board.RemovePiece(source);
+		Piece capturedPiece = board.RemovePiece(target);
+		board.PlacePiece(p, target);
+		if(capturedPiece != null) {
+			piecesOnTheBoard.remove(capturedPiece);
+			capturedPieces.add(capturedPiece);
+		}
+		return capturedPiece;
+	}
 	public boolean[][] PossibleMoves(ChessPosition sourcePosition){
 		Position position = sourcePosition.toPosition();
 		ValidateSourcePosition(position);
@@ -54,11 +70,11 @@ public class ChessMatch {
 	}
 	
 	private void ValidateSourcePosition(Position source) {
+		if(!board.ThereIsAPiece(source))
+			throw new ChessException("There is no piece on this source position.");
 		Piece piece = board.piece(source);
 		if(currentPlayer != ((ChessPiece) piece).getColor())
 			throw new ChessException("The chosen piece is not yours.");
-		if(!board.ThereIsAPiece(source))
-			throw new ChessException("There is no piece on this source position.");
 		if(!piece.isThereAnyPossibleMove())
 			throw new ChessException("There is no any possible move.");
 	}
@@ -70,6 +86,7 @@ public class ChessMatch {
 	
 	private void placeNewPiece(char column, int row, ChessPiece piece) {
 		board.PlacePiece(piece, new ChessPosition(column,row).toPosition());
+		piecesOnTheBoard.add(piece);
 	}
 	
 	private void initialSetup() {
